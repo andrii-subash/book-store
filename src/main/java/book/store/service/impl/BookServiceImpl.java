@@ -2,14 +2,18 @@ package book.store.service.impl;
 
 import book.store.dto.BookRequestDto;
 import book.store.dto.BookResponseDto;
+import book.store.dto.BookSearchParametersDto;
 import book.store.exception.EntityNotFoundException;
 import book.store.mapper.BookMapper;
 import book.store.model.Book;
 import book.store.repository.BookRepository;
+import book.store.repository.SpecificationProvider;
 import book.store.service.BookService;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final SpecificationProvider<Book> specificationProvider;
 
     @Override
     public BookResponseDto save(BookRequestDto requestDto) {
@@ -32,9 +37,42 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponseDto getById(Long id) {
-        Book book = bookRepository.getById(id).orElseThrow(() ->
+    public BookResponseDto findById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can`t find book by id " + id));
         return bookMapper.toDto(book);
+    }
+
+    @Override
+    public BookResponseDto update(Long id, BookRequestDto requestDto) {
+        if (bookRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("The book with id " + id + " does not exist");
+        }
+        Book book = bookMapper.toModel(requestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto) {
+        Map<String, List<String>> params = bookSearchParametersDto.getParams();
+
+        Specification<Book> specification = null;
+        for (Map.Entry<String, List<String>> entry : params.entrySet()) {
+            if (entry.getValue() != null) {
+                Specification<Book> sp = specificationProvider
+                        .getSpecification(entry.getValue(), entry.getKey());
+                specification = specification == null
+                        ? Specification.where(sp) : specification.and(sp);
+            }
+        }
+        return bookRepository.findAll(specification).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
