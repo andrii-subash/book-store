@@ -2,6 +2,7 @@ package book.store.service;
 
 import book.store.dto.BookRequestDto;
 import book.store.dto.BookResponseDto;
+import book.store.dto.BookSearchParametersDto;
 import java.util.List;
 
 public interface BookService {
@@ -9,5 +10,11 @@ public interface BookService {
 
     List<BookResponseDto> findAll();
 
-    BookResponseDto getById(Long id);
+    BookResponseDto findById(Long id);
+
+    BookResponseDto update(Long id, BookRequestDto requestDto);
+
+    void deleteById(Long id);
+
+    List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto);
 }
