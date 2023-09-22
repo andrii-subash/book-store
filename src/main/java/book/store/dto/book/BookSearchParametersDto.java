@@ -1,4 +1,4 @@
-package book.store.dto;
+package book.store.dto.book;
 
 import java.util.HashMap;
 import java.util.List;
