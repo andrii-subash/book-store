@@ -1,10 +1,9 @@
 package book.store.dto.book;
 
-import java.util.Set;
 import lombok.Data;
 
 @Data
-public class BookResponseDto {
+public class BookWithoutCategoryResponseDto {
     private Long id;
     private String title;
     private String author;
@@ -12,5 +11,4 @@ public class BookResponseDto {
     private Long price;
     private String description;
     private String coverImage;
-    private Set<Long> categoryIds;
 }

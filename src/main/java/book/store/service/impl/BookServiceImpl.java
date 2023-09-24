@@ -7,6 +7,7 @@ import book.store.exception.EntityNotFoundException;
 import book.store.mapper.BookMapper;
 import book.store.model.Book;
 import book.store.repository.BookRepository;
+import book.store.repository.CategoryRepository;
 import book.store.repository.SpecificationProvider;
 import book.store.service.BookService;
 import java.util.List;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final SpecificationProvider<Book> specificationProvider;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public BookResponseDto save(BookRequestDto requestDto) {
@@ -38,10 +40,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponseDto findById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Can`t find book by id " + id));
-        return bookMapper.toDto(book);
+    public BookResponseDto getById(Long id) {
+        return bookMapper.toDto(bookRepository.getReferenceById(id));
     }
 
     @Override
