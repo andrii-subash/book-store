@@ -1,6 +1,5 @@
 package book.store.service.impl;
 
-import book.store.dto.book.BookWithoutCategoryResponseDto;
 import book.store.dto.category.CategoryRequestDto;
 import book.store.dto.category.CategoryResponseDto;
 import book.store.exception.EntityNotFoundException;
@@ -53,13 +52,5 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
-    }
-
-    @Override
-    public List<BookWithoutCategoryResponseDto> findAllByCategoryId(Long categoryId,
-                                                                    Pageable pageable) {
-        return bookRepository.findAllBooksByCategoryId(categoryId, pageable).stream()
-                .map(bookMapper::toDtoWithoutCategories)
-                .toList();
     }
 }

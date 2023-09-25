@@ -3,6 +3,7 @@ package book.store.controller;
 import book.store.dto.book.BookWithoutCategoryResponseDto;
 import book.store.dto.category.CategoryRequestDto;
 import book.store.dto.category.CategoryResponseDto;
+import book.store.service.BookService;
 import book.store.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final BookService bookService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -65,6 +67,6 @@ public class CategoryController {
     @Operation(summary = "Get a list of books by category id")
     public List<BookWithoutCategoryResponseDto> getBooksByCategoryId(@PathVariable Long id,
                                                                      Pageable pageable) {
-        return categoryService.findAllByCategoryId(id, pageable);
+        return bookService.findAllByCategoryId(id, pageable);
     }
 }

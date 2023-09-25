@@ -8,7 +8,7 @@ public class BookWithoutCategoryResponseDto {
     private String title;
     private String author;
     private String isbn;
-    private Long price;
+    private Double price;
     private String description;
     private String coverImage;
 }
