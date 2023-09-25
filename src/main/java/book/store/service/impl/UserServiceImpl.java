@@ -5,7 +5,9 @@ import book.store.dto.user.UserRegistrationResponseDto;
 import book.store.exception.RegistrationException;
 import book.store.mapper.UserRegistrationMapper;
 import book.store.model.Role;
+import book.store.model.ShoppingCart;
 import book.store.model.User;
+import book.store.repository.ShoppingCartRepository;
 import book.store.repository.UserRepository;
 import book.store.service.RoleService;
 import book.store.service.UserService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRegistrationMapper userRegistrationMapper;
     private final UserRepository userRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
@@ -30,12 +33,11 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRegistrationMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        if (requestDto.getEmail().startsWith("admin")) {
-            user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.ADMIN)));
-        } else {
-            user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.USER)));
-        }
+        user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.USER)));
         User savedUser = userRepository.save(user);
-        return userRegistrationMapper.toDto(user);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(savedUser);
+        shoppingCartRepository.save(shoppingCart);
+        return userRegistrationMapper.toDto(savedUser);
     }
 }
