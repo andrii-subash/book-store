@@ -11,7 +11,7 @@ public interface BookService {
 
     List<BookResponseDto> findAll(Pageable pageable);
 
-    BookResponseDto findById(Long id);
+    BookResponseDto getById(Long id);
 
     BookResponseDto update(Long id, BookRequestDto requestDto);
 

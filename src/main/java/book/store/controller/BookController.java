@@ -27,6 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get a book by ID")
+    public BookResponseDto getBookById(@PathVariable Long id) {
+        return bookService.getById(id);
+    }
+
     @GetMapping
     @Operation(summary = "Get all available books")
     public List<BookResponseDto> getAll(Pageable pageable) {
@@ -35,14 +41,8 @@ public class BookController {
 
     @GetMapping("/search")
     @Operation(summary = "Search books by title or author")
-    private List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto) {
+    public List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto) {
         return bookService.searchBooks(bookSearchParametersDto);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Get a book by ID")
-    private BookResponseDto getBookById(@PathVariable Long id) {
-        return bookService.findById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -55,7 +55,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update information for book")
-    private BookResponseDto update(@PathVariable Long id,
+    public BookResponseDto update(@PathVariable Long id,
                                    @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
@@ -63,7 +63,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a book")
-    private void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 }
