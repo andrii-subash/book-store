@@ -29,7 +29,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a book by ID")
-    private BookResponseDto getBookById(@PathVariable Long id) {
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.getById(id);
     }
 
@@ -41,7 +41,7 @@ public class BookController {
 
     @GetMapping("/search")
     @Operation(summary = "Search books by title or author")
-    private List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto) {
+    public List<BookResponseDto> searchBooks(BookSearchParametersDto bookSearchParametersDto) {
         return bookService.searchBooks(bookSearchParametersDto);
     }
 
@@ -55,7 +55,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update information for book")
-    private BookResponseDto update(@PathVariable Long id,
+    public BookResponseDto update(@PathVariable Long id,
                                    @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
@@ -63,7 +63,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a book")
-    private void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 }
