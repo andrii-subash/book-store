@@ -26,8 +26,6 @@ public class CartItemServiceImpl implements CartItemService {
     public void create(String username, CartItemCreateRequestDto requestDto) {
         Optional<CartItem> cartItemOptional = isBookPresentInShoppingCart(username, requestDto);
         if (cartItemOptional.isEmpty()) {
-            //if the book is in the shopping cart,
-            //I just update the number of books instead of creating a new CartItem object.
             CartItem cartItem = cartItemMapper.toModel(requestDto);
             cartItem.setBook(bookRepository.getReferenceById(cartItem.getBook().getId()));
             ShoppingCart shoppingCart =
@@ -37,10 +35,7 @@ public class CartItemServiceImpl implements CartItemService {
             shoppingCart.getCartItems().add(savedCartItem);
             shoppingCartRepository.save(shoppingCart);
         } else {
-            CartItem cartItem = cartItemOptional.get();
-            int totalQuantity = cartItem.getQuantity() + requestDto.getQuantity();
-            cartItem.setQuantity(totalQuantity);
-            cartItemRepository.save(cartItem);
+            updateQuantityIfBookIsPresentInShoppingCart(cartItemOptional.get(), requestDto);
         }
     }
 
@@ -66,5 +61,12 @@ public class CartItemServiceImpl implements CartItemService {
         return shoppingCartRepository.findShoppingCartByUserEmail(username).getCartItems().stream()
                 .filter(cartItem -> cartItem.getBook().getId().equals(requestDto.getBookId()))
                 .findFirst();
+    }
+
+    private void updateQuantityIfBookIsPresentInShoppingCart(CartItem cartItem,
+                                                             CartItemCreateRequestDto requestDto) {
+        int totalQuantity = cartItem.getQuantity() + requestDto.getQuantity();
+        cartItem.setQuantity(totalQuantity);
+        cartItemRepository.save(cartItem);
     }
 }

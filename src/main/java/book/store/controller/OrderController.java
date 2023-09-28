@@ -62,7 +62,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}/items/{itemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @Operation(summary = "Get order items by id")
+    @Operation(summary = "Get order item by id")
     public OrderItemResponseDto getOrderItemById(@PathVariable Long orderId,
                                                       @PathVariable Long itemId,
                                                       Authentication authentication) {

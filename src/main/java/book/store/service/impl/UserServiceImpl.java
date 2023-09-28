@@ -33,15 +33,25 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRegistrationMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        if (user.getEmail().startsWith("admin")) {
-            user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.ADMIN)));
-        } else {
-            user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.USER)));
-        }
+        user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.USER)));
         User savedUser = userRepository.save(user);
+
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(savedUser);
         shoppingCartRepository.save(shoppingCart);
+        return userRegistrationMapper.toDto(savedUser);
+    }
+
+    @Override
+    public UserRegistrationResponseDto adminRegister(UserRegistrationRequestDto requestDto)
+            throws RegistrationException {
+        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new RegistrationException("Unable to complete registration!");
+        }
+        User user = userRegistrationMapper.toModel(requestDto);
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.setRoles(Set.of(roleService.findRoleByName(Role.RoleName.ADMIN)));
+        User savedUser = userRepository.save(user);
         return userRegistrationMapper.toDto(savedUser);
     }
 }
