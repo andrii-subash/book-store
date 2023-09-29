@@ -3,6 +3,7 @@ package book.store.service.impl;
 import book.store.dto.book.BookRequestDto;
 import book.store.dto.book.BookResponseDto;
 import book.store.dto.book.BookSearchParametersDto;
+import book.store.dto.book.BookWithoutCategoryResponseDto;
 import book.store.exception.EntityNotFoundException;
 import book.store.mapper.BookMapper;
 import book.store.model.Book;
@@ -74,6 +75,14 @@ public class BookServiceImpl implements BookService {
         }
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookWithoutCategoryResponseDto> findAllByCategoryId(Long categoryId,
+                                                                    Pageable pageable) {
+        return bookRepository.findAllBooksByCategoryId(categoryId, pageable).stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 }

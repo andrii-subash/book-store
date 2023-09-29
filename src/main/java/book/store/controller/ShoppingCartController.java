@@ -7,6 +7,7 @@ import book.store.service.CartItemService;
 import book.store.service.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -38,16 +39,17 @@ public class ShoppingCartController {
     @Operation(summary = "Add a book to shopping cart")
     public ShoppingCartResponseDto addBookToShoppingCart(
             Authentication authentication,
-            @RequestBody CartItemCreateRequestDto requestDto) {
+            @RequestBody @Valid CartItemCreateRequestDto requestDto) {
         cartItemService.create(authentication.getName(), requestDto);
         return shoppingCartService.getShoppingCartByUserEmail(authentication.getName());
     }
 
     @PutMapping("/cart-items/{cartItemId}")
     @Operation(summary = "Update books quantity in shopping cart")
-    public ShoppingCartResponseDto updateCartItem(@PathVariable Long cartItemId,
-                                                  @RequestBody CartItemUpdateRequestDto requestDto,
-                                                  Authentication authentication) {
+    public ShoppingCartResponseDto updateCartItem(
+            @PathVariable Long cartItemId,
+            @RequestBody @Valid CartItemUpdateRequestDto requestDto,
+            Authentication authentication) {
         cartItemService.update(cartItemId, requestDto);
         return shoppingCartService.getShoppingCartByUserEmail(authentication.getName());
     }

@@ -27,6 +27,13 @@ public class AuthenticationController {
         return userService.register(requestDto);
     }
 
+    @PostMapping("/admin/register")
+    UserRegistrationResponseDto adminRegister(@RequestBody @Valid
+                                              UserRegistrationRequestDto requestDto)
+            throws RegistrationException {
+        return userService.adminRegister(requestDto);
+    }
+
     @PostMapping("/login")
     UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.login(requestDto);

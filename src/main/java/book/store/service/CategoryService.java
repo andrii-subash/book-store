@@ -1,6 +1,5 @@
 package book.store.service;
 
-import book.store.dto.book.BookWithoutCategoryResponseDto;
 import book.store.dto.category.CategoryRequestDto;
 import book.store.dto.category.CategoryResponseDto;
 import java.util.List;
@@ -16,6 +15,4 @@ public interface CategoryService {
     CategoryResponseDto update(Long id, CategoryRequestDto categoryDto);
 
     void deleteById(Long id);
-
-    List<BookWithoutCategoryResponseDto> findAllByCategoryId(Long categoryId, Pageable pageable);
 }

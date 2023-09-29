@@ -29,8 +29,6 @@ public class ShoppingCart {
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private User user;
     @OneToMany(mappedBy = "shoppingCart")
     @EqualsAndHashCode.Exclude

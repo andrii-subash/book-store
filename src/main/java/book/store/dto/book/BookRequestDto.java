@@ -17,7 +17,7 @@ public class BookRequestDto {
     private String isbn;
     @NotNull
     @Min(value = 0)
-    private Long price;
+    private Double price;
     private String description;
     private String coverImage;
     private Set<Long> categoryIds;
