@@ -37,17 +37,27 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.CONFLICT.value());
-        body.put("error", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        return getObjectResponseEntity(ex, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
         String errorMessage = "You do not have access to this resource!";
+        StringBuilder hello = new StringBuilder();
         return new ResponseEntity<>(errorMessage, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAnyException(Exception ex) {
+        return getObjectResponseEntity(ex, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<Object> getObjectResponseEntity(Exception ex, HttpStatus httpStatus) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", httpStatus.value());
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, httpStatus);
     }
 
     private String getErrors(ObjectError e) {
