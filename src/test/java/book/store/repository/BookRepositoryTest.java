@@ -19,11 +19,11 @@ class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Test()
-    @DisplayName("Find all books by category id when two books have this category")
-    @Sql(scripts = "classpath:database/books/"
+    @DisplayName("Find all books by category id when two books have that category")
+    @Sql(scripts = "classpath:database/"
             + "add-books-and-categories-where-poem-category-has-two-books.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/books/remove-books-and-categories-from-tables.sql",
+    @Sql(scripts = "classpath:database/remove-books-and-categories-from-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllBooksByCategoryId_BooksWitCategoryAreExist_ReturnsTwoBooks() {
         List<Book> books = bookRepository.findAllBooksByCategoryId(1L,
@@ -35,12 +35,12 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("Find all books by category id when no one book has this category")
-    @Sql(scripts = "classpath:database/books/"
+    @Sql(scripts = "classpath:database/"
             + "add-books-and-categories-where-biography-category-has-no-one-book.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/books/remove-books-and-categories-from-tables.sql",
+    @Sql(scripts = "classpath:database/remove-books-and-categories-from-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAllBooksByCategoryId_BooksWitCategoryAreNotExist_ReturnsEmptyArray() {
+    void findAllBooksByCategoryId_BooksWitThatCategoryAreNotExist_ReturnsEmptyList() {
         List<Book> books = bookRepository.findAllBooksByCategoryId(3L,
                 PageRequest.of(0, 10));
         Assertions.assertEquals(0, books.size());
