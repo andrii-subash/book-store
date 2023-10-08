@@ -3,10 +3,8 @@ package book.store.service.impl;
 import book.store.dto.category.CategoryRequestDto;
 import book.store.dto.category.CategoryResponseDto;
 import book.store.exception.EntityNotFoundException;
-import book.store.mapper.BookMapper;
 import book.store.mapper.CategoryMapper;
 import book.store.model.Category;
-import book.store.repository.BookRepository;
 import book.store.repository.CategoryRepository;
 import book.store.service.CategoryService;
 import java.util.List;
@@ -19,8 +17,6 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
 
     @Override
     public List<CategoryResponseDto> findAll(Pageable pageable) {
@@ -41,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto update(Long id, CategoryRequestDto categoryDto) {
-        if (!categoryRepository.existsById(id)) {
+        if (categoryRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Can't find category by id: " + id);
         }
         Category category = categoryMapper.toModel(categoryDto);
