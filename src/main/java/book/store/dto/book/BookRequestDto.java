@@ -15,7 +15,7 @@ public class BookRequestDto {
     @NotNull
     private String author;
     @NotNull
-    @Size(min = 14)
+    @Size(min = 14, max = 20)
     private String isbn;
     @NotNull
     @Min(value = 0)

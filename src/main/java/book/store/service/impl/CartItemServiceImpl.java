@@ -3,6 +3,7 @@ package book.store.service.impl;
 import book.store.dto.cart.CartItemCreateRequestDto;
 import book.store.dto.cart.CartItemResponseDto;
 import book.store.dto.cart.CartItemUpdateRequestDto;
+import book.store.exception.EntityNotFoundException;
 import book.store.mapper.CartItemMapper;
 import book.store.model.CartItem;
 import book.store.model.ShoppingCart;
@@ -46,7 +47,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void update(Long cartItemId, CartItemUpdateRequestDto requestDto) {
-        CartItem cartItem = cartItemRepository.getReferenceById(cartItemId);
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find cart item with id " + cartItemId));
         cartItem.setQuantity(requestDto.getQuantity());
         cartItemRepository.save(cartItem);
     }
@@ -58,7 +60,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     private Optional<CartItem> isBookPresentInShoppingCart(String username,
                                                            CartItemCreateRequestDto requestDto) {
-        return shoppingCartRepository.findShoppingCartByUserEmail(username).getCartItems().stream()
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUserEmail(username);
+        return shoppingCart.getCartItems().stream()
                 .filter(cartItem -> cartItem.getBook().getId().equals(requestDto.getBookId()))
                 .findFirst();
     }
