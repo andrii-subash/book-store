@@ -9,6 +9,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class CartItemUpdateRequestDto {
     @NotNull
-    @Min(value = 0)
+    @Min(value = 1)
     private Integer quantity;
 }

@@ -281,7 +281,6 @@ public class ShoppingCartControllerIntegrationTest {
         
         assertEquals(5, errorMessages.size());
         assertTrue(errorMessages.contains("quantity must be greater than or equal to 1"));
-        assertTrue(errorMessages.contains("quantity must be greater than or equal to 0"));
         assertTrue(errorMessages.contains("quantity must not be null"));
         assertTrue(errorMessages.contains("bookId must not be null"));
     }

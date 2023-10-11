@@ -137,21 +137,6 @@ public class CartItemServiceImplTest {
     }
     
     @Test
-    @DisplayName("Instead of updating, it will delete cart item if book quantity is zero")
-    public void updateCartItem_BookQuantityIsZero_ReturnsShoppingCartWithoutThisDto() {
-        Long existedId = 1L;
-        CartItem modelFromDb = getCartItem().setId(existedId);
-        CartItemUpdateRequestDto requestDto = getCartItemUpdateRequestDto().setQuantity(0);
-        
-        when(cartItemRepository.findById(existedId)).thenReturn(Optional.of(modelFromDb));
-        cartItemService.update(existedId, requestDto);
-        
-        verify(cartItemRepository, times(1)).findById(existedId);
-        verify(cartItemRepository, times(1)).deleteById(existedId);
-        verify(cartItemRepository, times(0)).save(modelFromDb);
-    }
-    
-    @Test
     @DisplayName("Update cart item with valid dto and not valid id")
     public void updateCartItem_ValidDtoAndNotValidId_ReturnsException() {
         Long notExistedId = -1L;

@@ -38,6 +38,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto createOrder(String username, ShippingAdressRequestDto requestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUserEmail(username);
+        if (shoppingCart.getCartItems().isEmpty()) {
+            throw new RuntimeException("Your shopping cart is empty!");
+        }
         Order savedOrder = getOrderFromDb(shoppingCart.getUser(), requestDto);
         Set<OrderItem> orderItems = new HashSet<>();
         double total = 0;

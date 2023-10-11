@@ -49,12 +49,8 @@ public class CartItemServiceImpl implements CartItemService {
     public void update(Long cartItemId, CartItemUpdateRequestDto requestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
                 () -> new EntityNotFoundException("Can`t find cart item with id " + cartItemId));
-        if (requestDto.getQuantity() == 0) {
-            cartItemRepository.deleteById(cartItemId);
-        } else {
-            cartItem.setQuantity(requestDto.getQuantity());
-            cartItemRepository.save(cartItem);
-        }
+        cartItem.setQuantity(requestDto.getQuantity());
+        cartItemRepository.save(cartItem);
     }
 
     @Override
