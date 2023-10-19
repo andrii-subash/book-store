@@ -7,7 +7,4 @@ import book.store.exception.RegistrationException;
 public interface UserService {
     UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException;
-
-    UserRegistrationResponseDto adminRegister(UserRegistrationRequestDto requestDto)
-            throws RegistrationException;
 }
